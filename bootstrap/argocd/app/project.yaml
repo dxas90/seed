@@ -11,7 +11,7 @@ spec:
   description: Our ArgoCD Project to deploy our app locally
   # Allow manifests to deploy only from dxas90 git repositories
   sourceRepos:
-    - "https://github.com/dxas90/seed"
+    - "https://github.com/dxas90/*"
   destinations:
     - namespace: "*"
       server: "*"
