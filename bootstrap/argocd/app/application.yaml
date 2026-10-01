@@ -5,14 +5,14 @@ metadata:
   name: seed
   namespace: argocd
 spec:
-  destination:
-    namespace: argocd
-    server: 'https://kubernetes.default.svc'
   project: seed-project
   source:
     path: bootstrap
     repoURL: 'https://github.com/dxas90/seed.git'
     targetRevision: refs/heads/main
+  destination:
+    namespace: argocd
+    server: 'https://kubernetes.default.svc'
   syncPolicy:
     automated:
       prune: true
