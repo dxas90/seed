@@ -4,9 +4,9 @@ kind: Kustomization
 namespace: argocd
 resources:
   - https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-  - ./argocd-rbac-cm.yaml
 
 patches:
+  - path: argocd-rbac-cm.yaml
   - patch: |-
       - op: replace
         path: /subjects/0/namespace
