@@ -1,0 +1,14 @@
+/.idea/
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local.env
+.env.e2e
+
+node_modules/
+
+/config/mesh/.idea/
+/.mesh/
+.generated/
+!scripts/
