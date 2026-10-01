@@ -15,6 +15,10 @@ spec:
   destinations:
     - namespace: "*"
       server: "*"
+  # Allow all cluster-scoped resources (Namespace, CRDs, ClusterRoles, etc.)
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
   # Enables namespace orphaned resource monitoring.
   orphanedResources:
     warn: false
