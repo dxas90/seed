@@ -1,0 +1,12 @@
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: cloudflared-endpoint
+  namespace: networking
+spec:
+  endpoints:
+    - dnsName: "gateway.platform.example.com"
+      recordType: CNAME
+      targets: ["a39c2a1877fd84b45afa12faf8a50293-be19c8b8ce9b2bbc.elb.us-east-1.amazonaws.com"] # Istio gateway load balancer DNS name
+      recordTTL: 60

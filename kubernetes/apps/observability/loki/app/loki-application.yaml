@@ -1,0 +1,33 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: loki
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  labels:
+    app.kubernetes.io/name: loki
+    app.kubernetes.io/custom-part-of: observability
+    app.kubernetes.io/version: 3.5.7
+spec:
+  project: observability
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: observability
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+  sources:
+  - repoURL: oci://ghcr.io/grafana/helm-charts/loki
+    targetRevision: 7.0.0
+    helm:
+      valueFiles:
+      - $values/kubernetes/apps/observability/loki/app/loki-values.yaml
+  - repoURL: git@github.com:dxas90/seed.git
+    targetRevision: main
+    ref: values

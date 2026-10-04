@@ -1,0 +1,63 @@
+backend:
+  replicas: 0
+chunksCache:
+  enabled: false
+deploymentMode: SingleBinary
+gateway:
+  enabled: false
+loki:
+  analytics:
+    reporting_enabled: false
+  auth_enabled: false
+  commonConfig:
+    replication_factor: 1
+  compactor:
+    delete_request_store: filesystem
+    retention_enabled: true
+    working_directory: /var/loki/compactor/retention
+  ingester:
+    chunk_encoding: snappy
+  limits_config:
+    ingestion_burst_size_mb: 32
+    ingestion_rate_mb: 16
+    retention_period: 14d
+  schemaConfig:
+    configs:
+    - from: '2024-04-01'
+      index:
+        period: 24h
+        prefix: loki_index_
+      object_store: filesystem
+      schema: v13
+      store: tsdb
+  server:
+    grpc_server_max_recv_msg_size: 10485760
+    grpc_server_max_send_msg_size: 10485760
+    log_level: info
+  storage:
+    type: filesystem
+  structuredConfig:
+    ruler:
+      alertmanager_url: http://alertmanager-operated.observability.svc.cluster.local:9093
+      enable_alertmanager_v2: false
+      enable_api: true
+      rule_path: /rules/fake
+      storage:
+        local:
+          directory: /rules
+        type: local
+lokiCanary:
+  enabled: false
+read:
+  replicas: 0
+resultsCache:
+  enabled: false
+singleBinary:
+  persistence:
+    enabled: true
+    size: 50Gi
+  replicas: 1
+test:
+  enabled: false
+write:
+  replicas: 0

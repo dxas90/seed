@@ -1,0 +1,110 @@
+alertmanager:
+  enabled: false
+cleanPrometheusOperatorObjectNames: true
+crds:
+  enabled: true
+  upgradeJob:
+    enabled: true
+    forceConflicts: true
+grafana:
+  enabled: false
+kube-state-metrics:
+  fullnameOverride: kube-state-metrics
+  prometheus:
+    monitor:
+      enabled: true
+      honorLabels: true
+kubeApiServer:
+  enabled: true
+  serviceMonitor:
+    metricRelabelings:
+    - action: drop
+      regex: (apiserver|etcd|rest_client)_request(|_sli|_slo)_duration_seconds_bucket
+      sourceLabels:
+      - __name__
+    - action: drop
+      regex: apiserver_(response|watch_events)_sizes_bucket
+      sourceLabels:
+      - __name__
+    - action: drop
+      regex: apiserver_request_body_size_bytes_bucket
+      sourceLabels:
+      - __name__
+    - action: drop
+      regex: workqueue_(work|queue)_duration_seconds_bucket
+      sourceLabels:
+      - __name__
+kubeControllerManager:
+  enabled: false
+kubeEtcd:
+  enabled: false
+kubeProxy:
+  enabled: false
+kubeScheduler:
+  enabled: false
+kubeStateMetrics:
+  enabled: true
+kubelet:
+  enabled: true
+  serviceMonitor:
+    metricRelabelings:
+    - action: labeldrop
+      regex: (uid)
+    - action: labeldrop
+      regex: (id|name)
+    - action: drop
+      regex: (rest_client_request_duration_seconds_bucket|rest_client_request_duration_seconds_sum|rest_client_request_duration_seconds_count)
+      sourceLabels:
+      - __name__
+nameOverride: kube-prometheus-stack
+nodeExporter:
+  enabled: false
+prometheus:
+  prometheusSpec:
+    alertingEndpoints:
+    - apiVersion: v2
+      name: alertmanager
+      namespace: observability
+      port: 9093
+    enableAdminAPI: true
+    enableFeatures:
+    - memory-snapshot-on-shutdown
+    podMonitorSelectorNilUsesHelmValues: false
+    probeSelectorNilUsesHelmValues: false
+    resources:
+      limits:
+        memory: 2000Mi
+      requests:
+        cpu: 100m
+    retention: 14d
+    retentionSize: 18GB
+    ruleSelectorNilUsesHelmValues: false
+    scrapeConfigSelectorNilUsesHelmValues: false
+    serviceMonitorSelectorNilUsesHelmValues: false
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          resources:
+            requests:
+              storage: 20Gi
+    walCompression: true
+prometheus-node-exporter:
+  fullnameOverride: node-exporter
+  prometheus:
+    monitor:
+      enabled: true
+      relabelings:
+      - action: replace
+        regex: (.*)
+        replacement: $1
+        sourceLabels:
+        - __meta_kubernetes_pod_node_name
+        targetLabel: kubernetes_node
+      - action: replace
+        regex: (.*)
+        replacement: $1
+        sourceLabels:
+        - __meta_kubernetes_pod_node_name
+        targetLabel: nodename
+prometheusOperator:
+  fullnameOverride: prometheus-operator

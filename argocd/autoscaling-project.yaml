@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: autoscaling
+  namespace: argocd
+spec:
+  description: autoscaling infrastructure components
+  sourceRepos:
+  - '*'
+  destinations:
+  - server: '*'
+    namespace: '*'
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'

@@ -1,0 +1,10 @@
+apiVersion: builtin
+kind: LabelTransformer
+metadata:
+  name: labels
+labels:
+  app.kubernetes.io/cluster: common
+  app.kubernetes.io/source: fleet-infra
+fieldSpecs:
+  - path: metadata/labels
+    create: true

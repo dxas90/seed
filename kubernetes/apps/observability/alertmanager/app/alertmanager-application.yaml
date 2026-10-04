@@ -1,0 +1,32 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: alertmanager
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  labels:
+    app.kubernetes.io/name: alertmanager
+spec:
+  project: observability
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: observability
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+  sources:
+  - repoURL: https://bjw-s-labs.github.io/helm-charts
+    targetRevision: 5.0.1
+    chart: app-template
+    helm:
+      valueFiles:
+      - $values/kubernetes/apps/observability/alertmanager/app/alertmanager-values.yaml
+  - repoURL: git@github.com:dxas90/seed.git
+    targetRevision: main
+    ref: values

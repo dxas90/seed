@@ -1,0 +1,94 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+transformers:
+  - labels.yaml
+resources:
+  - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.6.2/standard-install.yaml
+  - https://github.com/prometheus-operator/prometheus-operator/releases/download/v0.94.1/stripped-down-crds.yaml
+  - https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+  - https://github.com/jetstack/cert-manager/releases/download/v1.20.4/cert-manager.yaml
+  - github.com/kubernetes/kube-state-metrics/examples/standard?ref=v2.20.0
+patches:
+  - patch: |-
+      $patch: delete
+      apiVersion: networking.k8s.io/v1
+      kind: NetworkPolicy
+      metadata:
+        name: not-used
+    target:
+      group: networking.k8s.io
+      kind: NetworkPolicy
+  - patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/args/-
+        value: --dns01-recursive-nameservers=https://1.1.1.1:443/dns-query,https://1.0.0.1:443/dns-query
+      - op: add
+        path: /spec/template/spec/containers/0/args/-
+        value: --dns01-recursive-nameservers-only=true
+      - op: add
+        path: /spec/template/spec/containers/0/resources
+        value:
+          limits:
+            cpu: 200m
+            memory: 300Mi
+          requests:
+            cpu: 100m
+            memory: 150Mi
+    target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: cert-manager
+      namespace: cert-manager
+  - patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/resources
+        value:
+          limits:
+            cpu: 200m
+            memory: 300Mi
+          requests:
+            cpu: 100m
+            memory: 150Mi
+    target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: cert-manager-cainjector
+      namespace: cert-manager
+  - patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/resources
+        value:
+          limits:
+            cpu: 200m
+            memory: 300Mi
+          requests:
+            cpu: 100m
+            memory: 150Mi
+    target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: cert-manager-webhook
+      namespace: cert-manager
+  - patch: |-
+      - op: add
+        path: /metadata/labels
+        value:
+          app.kubernetes.io/managed-by: argocd
+          app.kubernetes.io/app: cert-manager
+          app.kubernetes.io/version: v1.19.1
+          istio.io/dataplane-mode: ambient
+    target:
+      version: v1
+      kind: Namespace
+      name: cert-manager
+  - patch: |
+      - op: add
+        path: /spec/template/spec/containers/0/args/-
+        value: --kubelet-insecure-tls
+    target:
+      kind: Deployment
+      name: metrics-server

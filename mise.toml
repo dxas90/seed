@@ -1,0 +1,65 @@
+[tools]
+age = "latest"
+argocd = "latest"
+awscli = { version = "2", symlink_bins = "true" }
+helm = "latest"
+kind = "latest"
+kubectl = "latest"
+kustomize = "latest"
+python = { version = "3" }
+sops = "latest"
+
+[settings]
+experimental = true
+python.uv_venv_auto = true
+
+[env]
+PROJECT_NAME = "{{ config_root | basename }}"
+PATH = "{{ env.HOME }}/.local/bin:{{ env.PATH }}"
+_.python.venv = { path = "/tmp/.venv-{{ config_root | basename }}", create = true, python_create_args = ["--without-pip", "--copies"], uv_create_args = ["--system-site-packages"] }
+ARGOCD_NAMESPACE = "argocd"
+ARGOCD_REPO_SSH = "git@github.com:dxas90/seed.git"
+KIND_CLUSTER_NAME = "seed"
+
+[tasks.validate]
+description = "Render the repository-root Kustomization"
+run = "kubectl kustomize . >/tmp/seed-rendered.yaml && echo 'Rendered /tmp/seed-rendered.yaml'"
+
+[tasks."kind/create"]
+description = "Create the local seed kind cluster"
+run = "kind create cluster --name ${KIND_CLUSTER_NAME} --config kind-config.yaml"
+
+[tasks."kind/delete"]
+description = "Delete the local seed kind cluster"
+run = "kind delete cluster --name ${KIND_CLUSTER_NAME}"
+
+[tasks."argocd/install"]
+description = "Install Argo CD into the current Kubernetes context"
+run = [
+  "kubectl create namespace ${ARGOCD_NAMESPACE} --dry-run=client -o yaml | kubectl apply -f -",
+  "kubectl apply -n ${ARGOCD_NAMESPACE} -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml",
+  "kubectl patch configmap/argocd-cmd-params-cm -n ${ARGOCD_NAMESPACE} --type merge -p '{\"data\":{\"server.insecure\":\"true\"}}'",
+  "kubectl rollout restart deployment/argocd-server -n ${ARGOCD_NAMESPACE}",
+  "kubectl wait --for=condition=available -n ${ARGOCD_NAMESPACE} deployment/argocd-repo-server deployment/argocd-server --timeout=180s",
+]
+
+[tasks."argocd/apply-children"]
+description = "Apply AppProjects and child Applications directly"
+depends = ["validate"]
+run = "kubectl apply -k ."
+
+[tasks."argocd/apply-root"]
+description = "Apply the root app-of-apps Application"
+run = "kubectl apply -f argocd/root.yaml"
+
+[tasks."argocd/status"]
+description = "Show Argo CD Applications and AppProjects"
+run = [
+  "kubectl get applications -n ${ARGOCD_NAMESPACE}",
+  "kubectl get appprojects -n ${ARGOCD_NAMESPACE}",
+]
+
+[tasks."kind/test"]
+description = "Create kind, install Argo CD, render, and apply child Applications"
+depends = ["kind/create", "argocd/install", "argocd/apply-children"]
+run = "kubectl get applications -n ${ARGOCD_NAMESPACE} && kubectl get appprojects -n ${ARGOCD_NAMESPACE}"

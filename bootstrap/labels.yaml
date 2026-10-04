@@ -1,0 +1,11 @@
+---
+apiVersion: builtin
+kind: LabelTransformer
+metadata:
+  name: labels
+labels:
+  app.kubernetes.io/managed-by: argocd
+fieldSpecs:
+  - path: metadata/labels
+    kind: Namespace
+    create: true

@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: external-secrets-store
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  labels:
+    app.kubernetes.io/name: external-secrets-store
+    app.kubernetes.io/custom-part-of: secrets
+    app.kubernetes.io/version: 3.5.7
+spec:
+  project: security
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: external-secrets
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+  source:
+    repoURL: git@github.com:dxas90/seed.git
+    targetRevision: main
+    path: clusters/aws/staging-v2/apps/external-secrets/external-secrets/app
+    directory:
+      recurse: true

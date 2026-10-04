@@ -1,0 +1,59 @@
+controllers:
+  alertmanager:
+    annotations:
+      reloader.stakater.com/auto: 'true'
+    containers:
+      alertmanager:
+        image:
+          repository: quay.io/prometheus/alertmanager
+          tag: v0.33.1@sha256:9e082985f56f4c8c9f724e18f2288c6708f472e56a5286b8863d080434ea065d
+        ports:
+        - containerPort: 9093
+          name: http
+        probes:
+          liveness:
+            enabled: true
+          readiness:
+            enabled: true
+          startup:
+            enabled: true
+            spec:
+              failureThreshold: 30
+              periodSeconds: 5
+        resources:
+          limits:
+            memory: 99M
+          requests:
+            cpu: 11m
+            memory: 50M
+    statefulset:
+      volumeClaimTemplates:
+      - accessMode: ReadWriteOnce
+        globalMounts:
+        - path: /alertmanager
+        name: storage
+        size: 1Gi
+    type: statefulset
+persistence:
+  config:
+    globalMounts:
+    - path: /etc/alertmanager
+    name: alertmanager
+    type: configMap
+  secrets:
+    globalMounts:
+    - path: /etc/secrets
+    name: alertmanager-secret
+    type: secret
+route:
+  internal:
+    hostnames:
+    - alerts.example.com
+    parentRefs:
+    - name: traefik-gateway
+      namespace: network
+service:
+  app:
+    ports:
+      http:
+        port: 9093

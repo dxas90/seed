@@ -1,0 +1,53 @@
+persistence:
+  enabled: true
+  size: 10Gi
+service:
+  ports:
+  - name: otlp-grpc
+    port: 4317
+    protocol: TCP
+    targetPort: 4317
+  - name: otlp-http
+    port: 4318
+    protocol: TCP
+    targetPort: 4318
+  - name: tempo
+    port: 3200
+    protocol: TCP
+    targetPort: 3200
+serviceMonitor:
+  enabled: true
+  interval: 30s
+  scrapeTimeout: 10s
+tempo:
+  compactor:
+    compaction:
+      block_retention: 24h
+  ingester:
+    max_block_duration: 5m
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+      interval: 30s
+      scrapeTimeout: 10s
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: 0.0.0.0:4317
+        http:
+          endpoint: 0.0.0.0:4318
+  reportingEnabled: false
+  resources:
+    limits:
+      memory: 1Gi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  retention: 24h
+  storage:
+    trace:
+      backend: local
+      local:
+        path: /var/tempo/traces

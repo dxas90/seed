@@ -1,0 +1,20 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: "platform-example-com"
+  namespace: networking
+  labels:
+    use-cloudflare-solver: "true"
+spec:
+  secretName: "platform-example-com-tls"
+  secretTemplate:
+    labels:
+      use-cloudflare-solver: "true"
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: "platform.example.com"
+  dnsNames:
+    - "platform.example.com"
+    - "*.platform.example.com"

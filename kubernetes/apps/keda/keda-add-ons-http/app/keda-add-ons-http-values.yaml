@@ -1,0 +1,19 @@
+interceptor:
+  replicas:
+    min: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 20Mi
+operator:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 20Mi
+scaler:
+  replicas: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 20Mi

@@ -1,0 +1,37 @@
+config:
+  connectivity:
+    checker:
+      interval: 1m
+      target: 1.1.1.1:53
+  default-endpoint:
+    conditions: &id001
+    - '[STATUS] == 200'
+    - '[RESPONSE_TIME] < 4000'
+    interval: 1m
+  endpoints:
+  - conditions: *id001
+    group: default
+    interval: 1m
+    name: Internet
+    url: https://dev0ps.me
+  maintenance:
+    duration: 40m
+    start: 07:58
+    timezone: Europe/Athens
+  metrics: true
+  ui:
+    header: Homelab Health Status
+    title: Health Status
+deployment:
+  annotateConfigChecksum: true
+  strategy: RollingUpdate
+ingress:
+  enabled: false
+persistence:
+  enabled: true
+service:
+  port: 80
+  targetPort: 8080
+  type: ClusterIP
+serviceMonitor:
+  enabled: false
