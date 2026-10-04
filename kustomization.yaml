@@ -28,4 +28,3 @@ resources:
 - kubernetes/apps/observability/tempo/app/tempo-application.yaml
 - kubernetes/apps/cert-manager/cert-manager/install-cluster-apps-cert-manager-issuers-application.yaml
 - kubernetes/apps/cert-manager/cert-manager/install-cluster-apps-cert-manager-certificates-application.yaml
-- clusters/aws/staging-v2/apps/external-secrets/external-secrets/application.yaml
