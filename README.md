@@ -184,6 +184,14 @@ kubectl get appprojects -n argocd
 
 Applications that reference the SSH repository remain `Unknown` until Argo CD has repository credentials. That is an authentication issue, not a manifest-schema issue.
 
+To open the UI after setup, run this in a separate terminal and keep it open:
+
+```bash
+./scripts/argocd-port-forward.sh
+```
+
+Then browse to `http://127.0.0.1:8080`. If port 8080 is occupied, use `ARGOCD_LOCAL_PORT=18080 ./scripts/argocd-port-forward.sh`.
+
 ## Adding a component
 
 1. Choose or create a category under `kubernetes/apps/`.

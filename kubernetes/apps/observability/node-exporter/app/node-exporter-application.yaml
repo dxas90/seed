@@ -21,11 +21,12 @@ spec:
     - PrunePropagationPolicy=foreground
     - PruneLast=true
   sources:
-  - repoURL: oci://ghcr.io/prometheus-community/charts/prometheus-node-exporter
+  - repoURL: https://prometheus-community.github.io/helm-charts
+    chart: prometheus-node-exporter
     targetRevision: 4.55.0
     helm:
       valueFiles:
       - $values/kubernetes/apps/observability/node-exporter/app/node-exporter-values.yaml
-  - repoURL: git@github.com:dxas90/seed.git
+  - repoURL: https://github.com/dxas90/seed
     targetRevision: main
     ref: values

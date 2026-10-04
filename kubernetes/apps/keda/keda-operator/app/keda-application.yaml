@@ -20,9 +20,8 @@ spec:
     - CreateNamespace=true
     - PrunePropagationPolicy=foreground
     - PruneLast=true
+    - ServerSideApply=true
   source:
-    repoURL: ''
+    repoURL: https://kedacore.github.io/charts
+    chart: keda
     targetRevision: 2.20.1
-    path: kubernetes/apps/keda/keda-operator/app
-    directory:
-      recurse: true

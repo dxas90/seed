@@ -23,11 +23,12 @@ spec:
     - PrunePropagationPolicy=foreground
     - PruneLast=true
   sources:
-  - repoURL: oci://ghcr.io/grafana/helm-charts/tempo
+  - repoURL: https://grafana.github.io/helm-charts
+    chart: tempo
     targetRevision: 1.24.4
     helm:
       valueFiles:
       - $values/kubernetes/apps/observability/tempo/app/tempo-values.yaml
-  - repoURL: git@github.com:dxas90/seed.git
+  - repoURL: https://github.com/dxas90/seed
     targetRevision: main
     ref: values

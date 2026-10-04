@@ -36,7 +36,7 @@ Applications are grouped into AppProjects:
 |---|---|
 | `autoscaling` | KEDA and scaling add-ons |
 | `cert-manager` | issuers and certificates |
-| `kube-system` | CoreDNS and node-level utilities |
+| `kube-system` | node-level utilities |
 | `networking` | Istio, gateways, external DNS |
 | `observability` | metrics, dashboards, logs, traces, alerts |
 | `security` | External Secrets and secret stores |

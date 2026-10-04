@@ -159,10 +159,37 @@ kubectl get application <name> -n argocd \
 
 ## 7. Access the UI locally
 
-Port-forward the Argo CD server:
+Use the repository helper in a separate terminal:
 
 ```bash
-kubectl port-forward service/argocd-server -n argocd 8080:80
+./scripts/argocd-port-forward.sh
+```
+
+It validates the context, namespace, server rollout, service, and local port before starting the forwarding process. It intentionally remains attached to the terminal; closing that terminal or pressing Ctrl-C stops the tunnel.
+
+Defaults:
+
+- context: `kind-seed`
+- address: `127.0.0.1`
+- local port: `8080`
+
+Override them when needed:
+
+```bash
+KUBE_CONTEXT=kind-seed \
+ARGOCD_LOCAL_ADDRESS=127.0.0.1 \
+ARGOCD_LOCAL_PORT=18080 \
+./scripts/argocd-port-forward.sh
+```
+
+Equivalent direct command:
+
+```bash
+kubectl --context kind-seed port-forward \
+  --address 127.0.0.1 \
+  service/argocd-server \
+  -n argocd \
+  8080:80
 ```
 
 Open:
@@ -209,6 +236,31 @@ kubectl get application <name> -n argocd \
 ### Values file cannot be found
 
 Inspect `spec.sources[].helm.valueFiles`. Paths beginning with `$values/` are relative to the root of the source whose `ref` is `values`.
+
+### Port-forward exits or appears to crash
+
+A port-forward is a long-running foreground process. Run it in a separate terminal and keep that terminal open:
+
+```bash
+./scripts/argocd-port-forward.sh
+```
+
+If it exits, check:
+
+```bash
+kubectl --context kind-seed get pods -n argocd \
+  -l app.kubernetes.io/name=argocd-server
+kubectl --context kind-seed get service argocd-server -n argocd
+ss -ltn 'sport = :8080'
+```
+
+If port 8080 is busy:
+
+```bash
+ARGOCD_LOCAL_PORT=18080 ./scripts/argocd-port-forward.sh
+```
+
+Do not start `kubectl port-forward ... &` from a setup script and expect it to survive after that script exits. Many shells terminate background jobs on exit, and a foreground port-forward makes setup appear stuck.
 
 ### UI returns redirect or protocol errors
 

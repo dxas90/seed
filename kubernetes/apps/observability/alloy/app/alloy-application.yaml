@@ -23,11 +23,12 @@ spec:
     - PrunePropagationPolicy=foreground
     - PruneLast=true
   sources:
-  - repoURL: oci://ghcr.io/home-operations/charts-mirror/alloy
-    targetRevision: 1.10.0
+  - repoURL: https://grafana.github.io/helm-charts
+    chart: alloy
+    targetRevision: 0.12.1
     helm:
       valueFiles:
       - $values/kubernetes/apps/observability/alloy/app/alloy-values.yaml
-  - repoURL: git@github.com:dxas90/seed.git
+  - repoURL: https://github.com/dxas90/seed
     targetRevision: main
     ref: values

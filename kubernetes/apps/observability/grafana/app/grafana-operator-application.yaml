@@ -21,12 +21,14 @@ spec:
     - CreateNamespace=true
     - PrunePropagationPolicy=foreground
     - PruneLast=true
+    - ServerSideApply=true
   sources:
-  - repoURL: oci://ghcr.io/grafana/helm-charts/grafana-operator
+  - repoURL: https://grafana.github.io/helm-charts
+    chart: grafana-operator
     targetRevision: 5.24.0
     helm:
       valueFiles:
       - $values/kubernetes/apps/observability/grafana/app/grafana-operator-values.yaml
-  - repoURL: git@github.com:dxas90/seed.git
+  - repoURL: https://github.com/dxas90/seed
     targetRevision: main
     ref: values

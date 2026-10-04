@@ -22,12 +22,14 @@ spec:
     - CreateNamespace=true
     - PrunePropagationPolicy=foreground
     - PruneLast=true
+    - ServerSideApply=true
   sources:
   - repoURL: https://istio-release.storage.googleapis.com/charts
     chart: istiod
+    targetRevision: '1.26.1'
     helm:
       valueFiles:
       - $values/kubernetes/apps/istio-system/istio/app/istiod-values.yaml
-  - repoURL: git@github.com:dxas90/seed.git
+  - repoURL: https://github.com/dxas90/seed
     targetRevision: main
     ref: values

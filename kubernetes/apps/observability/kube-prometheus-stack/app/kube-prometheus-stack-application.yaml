@@ -20,12 +20,14 @@ spec:
     - CreateNamespace=true
     - PrunePropagationPolicy=foreground
     - PruneLast=true
+    - ServerSideApply=true
   sources:
-  - repoURL: oci://ghcr.io/prometheus-community/charts/kube-prometheus-stack
+  - repoURL: https://prometheus-community.github.io/helm-charts
+    chart: kube-prometheus-stack
     targetRevision: 87.10.1
     helm:
       valueFiles:
       - $values/kubernetes/apps/observability/kube-prometheus-stack/app/kube-prometheus-stack-values.yaml
-  - repoURL: git@github.com:dxas90/seed.git
+  - repoURL: https://github.com/dxas90/seed
     targetRevision: main
     ref: values

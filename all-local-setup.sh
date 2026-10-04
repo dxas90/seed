@@ -37,7 +37,7 @@ kubectl --context "${CONTEXT}" wait --for=condition=available -n argocd \
 kubectl kustomize . >/tmp/seed-rendered.yaml
 kubectl --context "${CONTEXT}" apply -k .
 
-cat <<'EOF'
+cat <<EOF
 
 Local validation completed.
 
@@ -46,6 +46,17 @@ Applications using git@github.com:dxas90/seed.git may report Unknown until a
 read-only repository credential is created in namespace argocd.
 
 Inspect status with:
-  kubectl get applications -n argocd
-  kubectl get appprojects -n argocd
+  kubectl --context "${CONTEXT}" get applications -n argocd
+  kubectl --context "${CONTEXT}" get appprojects -n argocd
+
+Open the Argo CD UI in a separate terminal:
+  ./scripts/argocd-port-forward.sh
+
+Then browse to:
+  http://127.0.0.1:8080
+
+The port-forward command intentionally remains attached to its terminal. Stop it
+with Ctrl-C. It is not started by this setup script, because a foreground
+port-forward would make setup appear hung and a shell background job would die
+when this script exits.
 EOF

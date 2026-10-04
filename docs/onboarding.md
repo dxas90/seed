@@ -4,7 +4,7 @@
 
 1. Read `README.md` and `FOLLOW_THIS.md`.
 2. Inspect `argocd/root.yaml` and the repository-root `kustomization.yaml`.
-3. Pick one simple Application such as reloader or CoreDNS.
+3. Pick one simple Application such as reloader.
 4. Follow its chart source, values file, project, destination namespace, and root Kustomization entry.
 5. Render the repository:
 

@@ -21,8 +21,6 @@ spec:
     - PrunePropagationPolicy=foreground
     - PruneLast=true
   source:
-    repoURL: ''
+    repoURL: https://kedacore.github.io/charts
+    chart: keda-add-ons-http
     targetRevision: 0.15.0
-    path: kubernetes/apps/keda/keda-add-ons-http/app
-    directory:
-      recurse: true

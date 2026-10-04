@@ -19,7 +19,7 @@ spec:
     - PrunePropagationPolicy=foreground
     - PruneLast=true
   source:
-    repoURL: git@github.com:dxas90/seed.git
+    repoURL: https://github.com/dxas90/seed
     targetRevision: main
     path: kubernetes/apps/cert-manager/cert-manager/issuers
     directory:

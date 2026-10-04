@@ -27,6 +27,6 @@ spec:
     helm:
       valueFiles:
       - $values/kubernetes/apps/observability/gatus/app/gatus-values.yaml
-  - repoURL: git@github.com:dxas90/seed.git
+  - repoURL: https://github.com/dxas90/seed
     targetRevision: main
     ref: values

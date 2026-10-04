@@ -59,6 +59,14 @@ run = [
   "kubectl get appprojects -n ${ARGOCD_NAMESPACE}",
 ]
 
+[tasks."argocd/ui"]
+description = "Port-forward Argo CD UI — run in a SEPARATE terminal, keep it open"
+run = "bash scripts/argocd-port-forward.sh"
+
+[tasks."argocd/password"]
+description = "Print the initial Argo CD admin password"
+run = "kubectl get secret argocd-initial-admin-secret -n ${ARGOCD_NAMESPACE} -o jsonpath='{.data.password}' | base64 --decode; echo"
+
 [tasks."kind/test"]
 description = "Create kind, install Argo CD, render, and apply child Applications"
 depends = ["kind/create", "argocd/install", "argocd/apply-children"]

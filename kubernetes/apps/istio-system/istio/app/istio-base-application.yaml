@@ -22,6 +22,8 @@ spec:
     - CreateNamespace=true
     - PrunePropagationPolicy=foreground
     - PruneLast=true
+    - ServerSideApply=true
   source:
     repoURL: https://istio-release.storage.googleapis.com/charts
     chart: base
+    targetRevision: '1.26.1'
