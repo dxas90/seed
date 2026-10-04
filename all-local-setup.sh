@@ -21,7 +21,7 @@ kubectl --context "${CONTEXT}" create namespace argocd --dry-run=client -o yaml 
   | kubectl --context "${CONTEXT}" apply -f -
 
 kubectl --context "${CONTEXT}" apply -n argocd \
-  -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+  -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml --server-side
 
 kubectl --context "${CONTEXT}" patch configmap/argocd-cmd-params-cm \
   -n argocd \
