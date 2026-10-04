@@ -34,6 +34,12 @@ kubectl --context "${CONTEXT}" wait --for=condition=available -n argocd \
   deployment/argocd-repo-server deployment/argocd-server \
   --timeout=180s
 
+# Apply bootstrap CRDs first (Gateway API, Prometheus Operator CRDs, cert-manager, etc.)
+# These are prerequisites for the ArgoCD Applications that reference them.
+# Must use --server-side to avoid annotation-too-large errors on large CRDs.
+echo "Applying bootstrap CRDs (server-side)..."
+kubectl --context "${CONTEXT}" apply --server-side -k bootstrap
+
 kubectl kustomize . >/tmp/seed-rendered.yaml
 kubectl --context "${CONTEXT}" apply -k .
 
