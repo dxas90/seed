@@ -22,5 +22,4 @@ spec:
     repoURL: https://github.com/dxas90/seed
     targetRevision: main
     path: kubernetes/apps/cert-manager/cert-manager/issuers
-    directory:
-      recurse: true
+    kustomize: {}

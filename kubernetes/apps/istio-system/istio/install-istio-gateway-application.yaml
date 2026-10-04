@@ -26,5 +26,4 @@ spec:
     repoURL: https://github.com/dxas90/seed
     targetRevision: main
     path: kubernetes/apps/istio-system/istio/gateway
-    directory:
-      recurse: true
+    kustomize: {}
