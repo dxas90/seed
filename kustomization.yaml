@@ -2,7 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
 - argocd/autoscaling-project.yaml
-- argocd/cert-manager-project.yaml
+# - argocd/cert-manager-project.yaml
 - argocd/kube-system-project.yaml
 - argocd/networking-project.yaml
 - argocd/observability-project.yaml
@@ -16,7 +16,7 @@ resources:
 - kubernetes/apps/keda/keda-operator/app/keda-application.yaml
 - kubernetes/apps/keda/keda-add-ons-http/app/keda-add-ons-http-application.yaml
 - kubernetes/apps/kube-system/reloader/app/reloader-application.yaml
-- kubernetes/apps/networking/external-dns/app/external-dns-application.yaml
+# - kubernetes/apps/networking/external-dns/app/external-dns-application.yaml
 - kubernetes/apps/observability/alertmanager/app/alertmanager-application.yaml
 - kubernetes/apps/observability/alloy/app/alloy-application.yaml
 - kubernetes/apps/observability/gatus/app/gatus-application.yaml
