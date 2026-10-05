@@ -50,8 +50,9 @@ route:
     hostnames:
     - alerts.example.com
     parentRefs:
-    - name: traefik-gateway
-      namespace: network
+    - name: public-gateway
+      namespace: istio-system
+      sectionName: http
 service:
   app:
     ports:
