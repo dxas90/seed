@@ -19,6 +19,7 @@ resources:
 # - kubernetes/apps/networking/external-dns/app/external-dns-application.yaml
 - kubernetes/apps/observability/alertmanager/app/alertmanager-application.yaml
 - kubernetes/apps/observability/alloy/app/alloy-application.yaml
+- kubernetes/apps/observability/fluent-bit/app/fluent-bit-application.yaml
 - kubernetes/apps/observability/gatus/app/gatus-application.yaml
 - kubernetes/apps/observability/grafana/app/grafana-operator-application.yaml
 - kubernetes/apps/observability/kube-prometheus-stack/app/kube-prometheus-stack-application.yaml

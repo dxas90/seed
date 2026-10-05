@@ -1,0 +1,60 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: fluent-bit
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  labels:
+    app.kubernetes.io/name: fluent-bit
+    app.kubernetes.io/custom-part-of: observability
+    app.kubernetes.io/version: 3.2.4
+  annotations:
+    argocd.argoproj.io/sync-wave: '5'
+spec:
+  project: observability
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: observability
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true
+    - ServerSideApply=true
+  sources:
+  - repoURL: https://fluent.github.io/helm-charts
+    chart: fluent-bit
+    targetRevision: 0.46.7
+    helm:
+      valueFiles:
+      - $values/kubernetes/apps/observability/fluent-bit/app/fluent-bit-values.yaml
+  - repoURL: https://github.com/dxas90/seed
+    targetRevision: main
+    ref: values
+  ignoreDifferences:
+  - group: '*'
+    kind: '*'
+    jsonPointers:
+    - /spec/template/metadata/creationTimestamp
+  - group: ''
+    kind: Service
+    jsonPointers:
+    - /spec/clusterIP
+    - /spec/clusterIPs
+  - group: ''
+    kind: ServiceAccount
+    jsonPointers:
+    - /secrets
+  - group: rbac.authorization.k8s.io
+    kind: ClusterRole
+    jsonPointers:
+    - /rules
+  - group: apps
+    kind: DaemonSet
+    jqPathExpressions:
+    - .metadata.annotations
+    - .spec.template.spec.containers[].resources
