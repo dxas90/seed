@@ -24,3 +24,25 @@ spec:
     repoURL: https://kedacore.github.io/charts
     chart: keda-add-ons-http
     targetRevision: 0.15.0
+  ignoreDifferences:
+  - group: '*'
+    kind: '*'
+    jsonPointers:
+    - /spec/template/metadata/creationTimestamp
+  - group: ''
+    kind: Service
+    jsonPointers:
+    - /spec/clusterIP
+    - /spec/clusterIPs
+  - group: ''
+    kind: ServiceAccount
+    jsonPointers:
+    - /secrets
+  - group: apps
+    kind: Deployment
+    jsonPointers:
+    - /spec/replicas
+  - group: apps
+    kind: StatefulSet
+    jsonPointers:
+    - /spec/replicas

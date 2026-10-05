@@ -25,3 +25,25 @@ spec:
     repoURL: https://kedacore.github.io/charts
     chart: keda
     targetRevision: 2.20.1
+  ignoreDifferences:
+  - group: '*'
+    kind: '*'
+    jsonPointers:
+    - /spec/template/metadata/creationTimestamp
+  - group: ''
+    kind: Service
+    jsonPointers:
+    - /spec/clusterIP
+    - /spec/clusterIPs
+  - group: ''
+    kind: ServiceAccount
+    jsonPointers:
+    - /secrets
+  - group: apiextensions.k8s.io
+    kind: CustomResourceDefinition
+    jsonPointers:
+    - /spec/preserveUnknownFields
+  - group: rbac.authorization.k8s.io
+    kind: ClusterRole
+    jsonPointers:
+    - /rules

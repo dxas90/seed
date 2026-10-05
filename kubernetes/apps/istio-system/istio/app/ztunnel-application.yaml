@@ -26,10 +26,24 @@ spec:
   sources:
   - repoURL: https://istio-release.storage.googleapis.com/charts
     chart: ztunnel
-    targetRevision: '1.26.1'
+    targetRevision: 1.26.1
     helm:
       valueFiles:
       - $values/kubernetes/apps/istio-system/istio/app/ztunnel-values.yaml
   - repoURL: https://github.com/dxas90/seed
     targetRevision: main
     ref: values
+  ignoreDifferences:
+  - group: '*'
+    kind: '*'
+    jsonPointers:
+    - /spec/template/metadata/creationTimestamp
+  - group: ''
+    kind: Service
+    jsonPointers:
+    - /spec/clusterIP
+    - /spec/clusterIPs
+  - group: ''
+    kind: ServiceAccount
+    jsonPointers:
+    - /secrets

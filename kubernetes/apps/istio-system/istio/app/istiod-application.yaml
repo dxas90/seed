@@ -26,10 +26,36 @@ spec:
   sources:
   - repoURL: https://istio-release.storage.googleapis.com/charts
     chart: istiod
-    targetRevision: '1.26.1'
+    targetRevision: 1.26.1
     helm:
       valueFiles:
       - $values/kubernetes/apps/istio-system/istio/app/istiod-values.yaml
   - repoURL: https://github.com/dxas90/seed
     targetRevision: main
     ref: values
+  ignoreDifferences:
+  - group: '*'
+    kind: '*'
+    jsonPointers:
+    - /spec/template/metadata/creationTimestamp
+  - group: ''
+    kind: Service
+    jsonPointers:
+    - /spec/clusterIP
+    - /spec/clusterIPs
+  - group: ''
+    kind: ServiceAccount
+    jsonPointers:
+    - /secrets
+  - group: rbac.authorization.k8s.io
+    kind: ClusterRole
+    jsonPointers:
+    - /rules
+  - group: admissionregistration.k8s.io
+    kind: MutatingWebhookConfiguration
+    jsonPointers:
+    - /webhooks
+  - group: admissionregistration.k8s.io
+    kind: ValidatingWebhookConfiguration
+    jsonPointers:
+    - /webhooks
