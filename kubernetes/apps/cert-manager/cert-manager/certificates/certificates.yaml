@@ -12,7 +12,7 @@ spec:
     labels:
       use-cloudflare-solver: "true"
   issuerRef:
-    name: letsencrypt-production
+    name: selfsigned
     kind: ClusterIssuer
   commonName: "platform.example.com"
   dnsNames:

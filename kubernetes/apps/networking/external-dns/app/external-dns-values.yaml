@@ -16,7 +16,7 @@ fullnameOverride: external-dns
 podAnnotations:
   secret.reloader.stakater.com/reload: external-dns-secret
 policy: sync
-provider: cloudflare
+provider: inmemory
 resources:
   limits:
     cpu: 200m
