@@ -71,7 +71,7 @@ config:
         Mem_Buf_Limit       200MB
         Skip_Long_Lines     On
         Refresh_Interval    10
-        Read_from_Head      On
+        Read_from_Head      Off
         storage.type        filesystem
 
     [INPUT]
@@ -84,7 +84,7 @@ config:
   filters: |
     [FILTER]
         Name                kubernetes
-        Match               kube.*
+        Match               kube.var.*
         Kube_URL            https://kubernetes.default.svc:443
         Kube_CA_File        /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
         Kube_Token_File     /var/run/secrets/kubernetes.io/serviceaccount/token
@@ -105,7 +105,6 @@ config:
         Name                modify
         Match               kube.events
         Add                 cluster kind-seed
-        Add                 kubernetes_cluster_events true
 
   outputs: |
     [OUTPUT]
