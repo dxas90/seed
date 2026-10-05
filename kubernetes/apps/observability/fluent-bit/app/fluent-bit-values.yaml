@@ -116,7 +116,7 @@ config:
         URI                 /loki/api/v1/push
         Line_Format         json
         Labels              job=fluent-bit,cluster=$cluster,namespace=$kubernetes['namespace_name'],pod=$kubernetes['pod_name'],container=$kubernetes['container_name']
-        Auto_Kubernetes_Labels On
+        Label_Keys          $kubernetes['labels']['app.kubernetes.io/name'],$kubernetes['labels']['app']
         Retry_Limit         False
 
     [OUTPUT]
@@ -126,7 +126,7 @@ config:
         Port                3100
         URI                 /loki/api/v1/push
         Line_Format         json
-        Labels              job=fluent-bit-events,cluster=$cluster,kubernetes_cluster_events=$kubernetes_cluster_events
+        Labels              job=fluent-bit-events,cluster=$cluster
         Retry_Limit         False
 
   customParsers: |
