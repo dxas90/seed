@@ -9,6 +9,7 @@ metadata:
     app.kubernetes.io/name: istio
   annotations:
     argocd.argoproj.io/sync-wave: '1'
+    argocd.argoproj.io/compare-options: ServerSideDiff=true
 spec:
   project: networking
   destination:
@@ -54,30 +55,6 @@ spec:
     - /rules
   - group: apps
     kind: DaemonSet
-    jsonPointers:
-    - /spec/revisionHistoryLimit
-    - /spec/template/spec/containers/0/env/0/valueFrom/fieldRef/apiVersion
-    - /spec/template/spec/containers/0/env/5/valueFrom/resourceFieldRef/divisor
-    - /spec/template/spec/containers/0/env/6/valueFrom/resourceFieldRef/divisor
-    - /spec/template/spec/containers/0/env/7/valueFrom/fieldRef/apiVersion
-    - /spec/template/spec/containers/0/env/8/valueFrom/fieldRef/apiVersion
-    - /spec/template/spec/containers/0/imagePullPolicy
-    - /spec/template/spec/containers/0/readinessProbe/failureThreshold
-    - /spec/template/spec/containers/0/readinessProbe/httpGet/scheme
-    - /spec/template/spec/containers/0/readinessProbe/periodSeconds
-    - /spec/template/spec/containers/0/readinessProbe/successThreshold
-    - /spec/template/spec/containers/0/readinessProbe/timeoutSeconds
-    - /spec/template/spec/containers/0/terminationMessagePath
-    - /spec/template/spec/containers/0/terminationMessagePolicy
-    - /spec/template/spec/dnsPolicy
-    - /spec/template/spec/restartPolicy
-    - /spec/template/spec/schedulerName
-    - /spec/template/spec/securityContext
-    - /spec/template/spec/serviceAccount
-    - /spec/template/spec/volumes/0/hostPath/type
-    - /spec/template/spec/volumes/3/hostPath/type
-    - /spec/template/spec/volumes/4/hostPath/type
-    - /spec/updateStrategy/rollingUpdate/maxSurge
     jqPathExpressions:
     - .spec.template.spec.containers[].resources
     - .spec.template.spec.initContainers[]?.resources
