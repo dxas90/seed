@@ -25,12 +25,31 @@ tempo:
       block_retention: 24h
   ingester:
     max_block_duration: 5m
+  metricsGenerator:
+    enabled: true
+    remoteWriteUrl: http://kube-prometheus-stack-prometheus.observability.svc:9090/api/v1/write
+    processor:
+      local_blocks:
+        flush_to_storage: true
+      service_graphs: {}
+      span_metrics: {}
+    storage:
+      path: /var/tempo/metrics
+    traces_storage:
+      path: /var/tempo/generator/wal
   metrics:
     enabled: true
     serviceMonitor:
       enabled: true
       interval: 30s
       scrapeTimeout: 10s
+  overrides:
+    defaults:
+      metrics_generator:
+        processors:
+          - local-blocks
+          - service-graphs
+          - span-metrics
   receivers:
     otlp:
       protocols:
