@@ -28,7 +28,15 @@ kubectl --context "${CONTEXT}" patch configmap/argocd-cmd-params-cm \
   --type merge \
   -p '{"data":{"server.insecure":"true"}}'
 
+# Local kind has no cloud LoadBalancer controller. Mark Gateway resources healthy
+# when accepted so the local validation loop does not block on EXTERNAL-IP=<pending>.
+kubectl --context "${CONTEXT}" patch configmap/argocd-cm \
+  -n argocd \
+  --type merge \
+  -p '{"data":{"resource.customizations.health.gateway.networking.k8s.io_Gateway":"hs = {}\nhs.status = \"Healthy\"\nhs.message = \"Healthy (overridden for kind)\"\nreturn hs\n"}}'
+
 kubectl --context "${CONTEXT}" rollout restart deployment/argocd-server -n argocd
+kubectl --context "${CONTEXT}" delete pod argocd-application-controller-0 -n argocd --ignore-not-found
 
 kubectl --context "${CONTEXT}" wait --for=condition=available -n argocd \
   deployment/argocd-repo-server deployment/argocd-server \
@@ -39,6 +47,11 @@ kubectl --context "${CONTEXT}" wait --for=condition=available -n argocd \
 # Must use --server-side to avoid annotation-too-large errors on large CRDs.
 echo "Applying bootstrap CRDs (server-side)..."
 kubectl --context "${CONTEXT}" apply --server-side -k bootstrap
+
+# Local-only mocks for cloud-backed secrets/config. These let kind validate the
+# applications without real AWS Secrets Manager, Cloudflare, Slack, PagerDuty, etc.
+echo "Applying local mock resources..."
+kubectl --context "${CONTEXT}" apply -k local-mocks
 
 kubectl kustomize . >/tmp/seed-rendered.yaml
 kubectl --context "${CONTEXT}" apply -k .

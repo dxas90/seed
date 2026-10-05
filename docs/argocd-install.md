@@ -105,6 +105,29 @@ Expected repository-defined resources:
 
 ## 5. Bootstrap Seed
 
+### Local kind mocks
+
+Before applying the Applications in a disposable kind cluster, seed local-only mocks:
+
+```bash
+kubectl apply -k local-mocks
+```
+
+These mocks replace cloud/provider-backed prerequisites that do not exist in kind:
+
+- `Secret/cert-manager-secret` for the Cloudflare API token normally sourced from AWS Secrets Manager.
+- `Secret/external-dns-secret` so the chart can mount its expected token Secret.
+- `Secret/alertmanager-secret` plus `ConfigMap/alertmanager` so the Alertmanager StatefulSet can start.
+- `ConfigMap/alloy-configmap` so Alloy can start with a minimal local config.
+
+`external-dns` uses the `inmemory` provider for local validation, and certificates use the local `selfsigned` issuer. The real ACME issuers remain present, but the AWS-backed ExternalSecret is excluded from the local issuers kustomization because there is no AWS Secrets Manager backend in kind.
+
+The setup helper applies these automatically:
+
+```bash
+./all-local-setup.sh
+```
+
 ### Normal GitOps bootstrap
 
 Apply only the root Application:
