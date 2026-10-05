@@ -23,6 +23,7 @@ spec:
     - PrunePropagationPolicy=foreground
     - PruneLast=true
     - ServerSideApply=true
+    - RespectIgnoreDifferences=true
   sources:
   - repoURL: https://istio-release.storage.googleapis.com/charts
     chart: cni
