@@ -8,7 +8,6 @@ resources:
   - https://github.com/prometheus-operator/prometheus-operator/releases/download/v0.94.1/stripped-down-crds.yaml
   - https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
   - https://github.com/jetstack/cert-manager/releases/download/v1.20.4/cert-manager.yaml
-  - github.com/kubernetes/kube-state-metrics/examples/standard?ref=v2.20.0
 patches:
   - patch: |-
       $patch: delete
