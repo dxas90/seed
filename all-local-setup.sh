@@ -50,6 +50,14 @@ kubectl --context "${CONTEXT}" apply --server-side -k bootstrap
 
 # Local-only mocks for cloud-backed secrets/config. These let kind validate the
 # applications without real AWS Secrets Manager, Cloudflare, Slack, PagerDuty, etc.
+# Create the target namespaces first: a clean cluster does not have them until
+# the Argo CD Applications reconcile, but local-mocks must exist before that.
+echo "Creating local mock namespaces..."
+for namespace in observability networking cert-manager; do
+  kubectl --context "${CONTEXT}" create namespace "${namespace}" --dry-run=client -o yaml \
+    | kubectl --context "${CONTEXT}" apply -f -
+done
+
 echo "Applying local mock resources..."
 kubectl --context "${CONTEXT}" apply -k local-mocks
 

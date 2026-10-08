@@ -107,9 +107,12 @@ Expected repository-defined resources:
 
 ### Local kind mocks
 
-Before applying the Applications in a disposable kind cluster, seed local-only mocks:
+Before applying the Applications in a disposable kind cluster, create the mock target namespaces and seed local-only mocks:
 
 ```bash
+for namespace in observability networking cert-manager; do
+  kubectl create namespace "${namespace}" --dry-run=client -o yaml | kubectl apply -f -
+done
 kubectl apply -k local-mocks
 ```
 
